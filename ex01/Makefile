@@ -10,6 +10,8 @@ $(NAME): $(OBJ)
 %.o: %.cpp
 		$(CPP) $(CPPFLAGS) -c $<
 
+all: $(NAME)
+
 clean:
 		rm -rf $(OBJ)
 		

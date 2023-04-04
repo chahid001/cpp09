@@ -59,11 +59,8 @@ bool BitcoinExchange::checkDate(std::string date)
     time_t cal = mktime(&t_date);
     if (cal == -1)
         return (false);
-    std::cout << t_date.tm_year << std::endl;
-    std::cout << t_date.tm_mon << std::endl;
-    std::cout << t_date.tm_mday << std::endl;
     if (t_date.tm_year != year - 1900 || t_date.tm_mon != month - 1 || t_date.tm_mday != day)
-        std::cout << "s" << std::endl;
+        return (false);
     return (true);
 }
 
@@ -83,7 +80,7 @@ float BitcoinExchange::checkValue(std::string value)
             std::cout << "Error: not a positive number." << std::endl;
             return(0.0);
         }    
-        else if (val >= 2147483648.0)
+        else if (val > 1000)
         {
             std::cout << "Error: too large a number." << std::endl;
             return (0.0);
@@ -132,6 +129,8 @@ void BitcoinExchange::readParse(char *argv)
     std::string date;
     float value;
 
+    if (!file.is_open())
+        std::cout << "Error: could not open file." << std::endl;
     while (std::getline(file, input))
     {
         if (input != "date | value")

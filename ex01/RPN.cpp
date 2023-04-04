@@ -46,7 +46,7 @@ int RPN::getStackTop()
 
 void RPN::expEval(char *exp)
 {
-    char *c = strtok(exp, " ");
+    char *c = strtok(exp, " \r\n");
     while (c != NULL)
     {
         if (isOperand(c[0]) != -1)
