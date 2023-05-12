@@ -33,10 +33,17 @@ int RPN::calcOperation(int a, int b, char op)
         return (b+a);
     else if (op == '-')
         return (b-a);
-    else if (op == '*')
-        return (b*a);
-    else
+    else if (op == '/')
+    {
+        if (a == 0)
+        {
+            std::cout << "Can't divide by zero" << std::endl;
+            exit(EXIT_FAILURE);
+        }
         return (b/a);
+    }
+    else
+        return (b*a);
 }
 
 int RPN::getStackTop()
@@ -46,45 +53,41 @@ int RPN::getStackTop()
 
 void RPN::expEval(char *exp)
 {
-    char *c = strtok(exp, " \r\n");
-    while (c != NULL)
-    {
-        if (isOperand(c[0]) != -1)
-        {
-            int nb;
-            nb = atoi(&c[0]);
-            if (nb < 10)
-                this->stack.push(nb);
-            else
-            {
-                std::cout << "great than 10" << std::endl;
-                exit(EXIT_FAILURE);
-            }  
-        }
-        else if (strlen(c) == 1 && isOperator(c[0]))
-        {
-            if (this->stack.size() == 2)
-            {
-                int a,b, res;
-                a = this->stack.top();
-                this->stack.pop();
-                b = this->stack.top();
-                this->stack.pop();
-                this->stack.push(calcOperation(a, b, c[0]));
-            }
-            else
-                std::cout << "asd" << std::endl;
+    int i = 0;
+    int res;
+    int nb;
 
-        }
-        else
+    while (exp[i])
+    {
+        while (isspace(exp[i]))
+            i++;
+        if (isOperand(exp[i]) != -1)
         {
-            std::cout << "error" << std::endl;
-            exit(EXIT_FAILURE);
+            nb = atoi (&exp[i]);
+            if (nb >= 10)
+            {
+                std::cout << "Try a number less than 10" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            this->stack.push(atoi(&exp[i]));
         }
-        c = strtok(NULL, " ");
+        else if (isOperator(exp[i]) != -1)
+        {
+            if (this->stack.size() < 2)
+            {
+                std::cout << "Syntax error" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            int a = this->stack.top();
+            this->stack.pop();
+            int b = this->stack.top();
+            this->stack.pop();
+            res = calcOperation(a, b, exp[i]);
+            this->stack.push(res);
+        }
+        i++;
     }
-    int res = this->stack.top();
-    std::cout << res << std::endl;
+    std::cout << getStackTop() << std::endl;
 }
 
 

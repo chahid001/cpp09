@@ -1,7 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schahid <schahid@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/12 11:46:32 by schahid           #+#    #+#             */
+/*   Updated: 2023/05/12 16:01:05 by schahid          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "BitcoinExchange.hpp"
 
 BitcoinExchange::BitcoinExchange(){}
 BitcoinExchange::~BitcoinExchange(){}
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy)
+{
+   this->database = copy.database;
+}
+
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& in)
+{
+    this->database = in.database;
+    return (*this);    
+}
 
 void BitcoinExchange::parsePush(std::string data)
 {
@@ -73,17 +96,17 @@ float BitcoinExchange::checkValue(std::string value)
 
     if (value[0] == '.')
         return (-1.0);
-    else if (*ptr == '\0')
+    if (*ptr == '\0')
     {
         if (val < 0.0)
         {
             std::cout << "Error: not a positive number." << std::endl;
-            return(0.0);
+            return(-2.0);
         }    
         else if (val > 1000)
         {
             std::cout << "Error: too large a number." << std::endl;
-            return (0.0);
+            return (-2.0);
         }
         else
             return (val);
@@ -100,8 +123,8 @@ void BitcoinExchange::findCalc(std::string date, float value)
         std::cout << date << " => " << value << " = " << value*it->second << std::endl;
     else
     {
-        std::map<std::string, float>::iterator lower = this->database.end();
-        for (it = this->database.begin(); it != lower; it++)
+        std::map<std::string, float>::iterator lower = this->database.end(); 
+        for (it = this->database.begin(); it != this->database.end(); it++)
         {
             if (it->first <= date)
                 lower = it;
@@ -110,15 +133,8 @@ void BitcoinExchange::findCalc(std::string date, float value)
         }
         if (it == this->database.begin())
             std::cout << date << " => " << value << " = " << value*it->second << std::endl;
-        else if (it == this->database.end())
-        {
-            it--;
-            std::cout << date << " => " << value << " = " << value*it->second << std::endl;
-        }
         else
-        {
             std::cout << date << " => " << value << " = " << value*lower->second << std::endl;
-        }
     }
 }
 
@@ -133,6 +149,8 @@ void BitcoinExchange::readParse(char *argv)
         std::cout << "Error: could not open file." << std::endl;
     while (std::getline(file, input))
     {
+        if (input.empty())
+            continue;
         if (input != "date | value")
         {
             size_t pos = input.find("|");
@@ -148,9 +166,9 @@ void BitcoinExchange::readParse(char *argv)
                 continue;  
             }
             value = checkValue(input.substr(pos+2));
-            if (value == 0.0)
+            if (value == -2.0)
                 continue;
-            else if (value == -1.0)
+            if (value == -1.0)
             {
                 std::cout << "Error: bad input => " << input << std::endl;
                 continue; 

@@ -21,5 +21,4 @@ class RPN
         int getStackTop();
         int calcOperation(int a, int b, char op);
 };
-
 #endif

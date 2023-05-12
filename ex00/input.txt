@@ -1,4 +1,0 @@
-date | value
-date | value
-date |value
-2011-01-30 | 0
