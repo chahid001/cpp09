@@ -53,13 +53,13 @@ void PmergeMe::mergeVec(int start, int mid, int end)
     while (i < left_size)
     {
         left[i] = this->vec[start + i];
-        ++i;
+        i++;
     }
     int j = 0;
     while (j < right_size)
     {
         right[j] = this->vec[mid + 1 + j];
-        ++j;
+        j++;
     }
     i = 0;
     j = 0;
@@ -69,41 +69,41 @@ void PmergeMe::mergeVec(int start, int mid, int end)
         if (left[i] <= right[j])
         {
             this->vec[idx] = left[i];
-            ++i;
+            i++;
         }
         else
         {
             this->vec[idx] = right[j];
-            ++j;
+            j++;
         }
-        ++idx;
+        idx++;
     }
 
     while (i < left_size)
     {
         this->vec[idx] = left[i];
-        ++i;
-        ++idx;
+        i++;
+        idx++;
     }
 
     while (j < right_size)
     {
         this->vec[idx] = right[j];
-        ++j;
-        ++idx;
+        j++;
+        idx++;
     }
 }
 
 void PmergeMe::InsertVec(int start, int end)
 {
-    for (int i = start+1; i <= end; i++)
+    for (int i = start+1; i <= end; i++) //i = 1
     {
         int key = this->vec[i];
-        int j = i -1;
+        int j = i - 1; 
         while (j >= start && this->vec[j] > key)
         {
             this->vec[j + 1] = this->vec[j];
-            --j;
+            j--;
         }
         this->vec[j + 1] = key;
     }
@@ -215,13 +215,13 @@ void PmergeMe::mergeDeq(int start, int mid, int end)
     while (i < left_size)
     {
         left[i] = this->deq[start + i];
-        ++i;
+        i++;
     }
     int j = 0;
     while (j < right_size)
     {
         right[j] = this->deq[mid + 1 + j];
-        ++j;
+        j++;
     }
     i = 0;
     j = 0;
@@ -231,28 +231,28 @@ void PmergeMe::mergeDeq(int start, int mid, int end)
         if (left[i] <= right[j])
         {
             this->deq[idx] = left[i];
-            ++i;
+            i++;
         }
         else
         {
             this->deq[idx] = right[j];
-            ++j;
+            j++;
         }
-        ++idx;
+        idx++;
     }
 
     while (i < left_size)
     {
         this->deq[idx] = left[i];
-        ++i;
-        ++idx;
+        i++;
+        idx++;
     }
 
     while (j < right_size)
     {
         this->deq[idx] = right[j];
-        ++j;
-        ++idx;
+        j++;
+        idx++;
     }
 }
 
@@ -265,7 +265,7 @@ void PmergeMe::InsertDeq(int start, int end)
         while (j >= start && this->deq[j] > key)
         {
             this->deq[j + 1] = this->deq[j];
-            --j;
+            j--;
         }
         this->deq[j + 1] = key;
     }
