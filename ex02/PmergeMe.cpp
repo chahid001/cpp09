@@ -4,82 +4,149 @@ PmergeMe::PmergeMe(){}
 
 PmergeMe::~PmergeMe(){}
 
-PmergeMe::PmergeMe(const PmergeMe& copy){}
+PmergeMe::PmergeMe(const PmergeMe& copy)
+{
+    this->vec = copy.vec;
+    this->deq = copy.deq;
+}
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& in)
 {
+    this->vec = in.vec;
+    this->deq = in.deq;
     return (*this);
 }
 
-void PmergeMe::mergeVec(int a, int b, int m)
+//vector
+
+bool PmergeMe::isDuplicateVec()
 {
-    int left_size = m - a + 1;
-    int right_size = b - m;
-    std::vector<int> left(left_size), right(right_size);
+    int size = this->vec.size();
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = i + 1; j < size; j++)
+        {
+            if (vec[i] == vec[j])
+                return true;
+        }
+    }
+    return false;
+}
+
+double PmergeMe::vec_duration()
+{
+    clock_t start = clock();
+    mergeInsertVec(0, this->vec.size() - 1);
+    clock_t end = clock();
+    double dur = double(end - start) / CLOCKS_PER_SEC;
+    return (dur);
+}
+
+void PmergeMe::mergeVec(int start, int mid, int end)
+{
+    int left_size = mid - start + 1;
+    int right_size = end - mid;
+    std::vector<int> left(left_size);
+    std::vector<int> right(right_size);
+
     int i = 0;
-    int j = 0;
     while (i < left_size)
     {
-        left[i] = this->vec[a+i];
-        i++;
+        left[i] = this->vec[start + i];
+        ++i;
     }
+    int j = 0;
     while (j < right_size)
     {
-        right[j] = this->vec[m+1+j];
-        j++;
+        right[j] = this->vec[mid + 1 + j];
+        ++j;
     }
     i = 0;
     j = 0;
-    int k = a;
-
+    int idx = start;
     while (i < left_size && j < right_size)
     {
         if (left[i] <= right[j])
         {
-            this->vec[k] = left[i];
-            i++;
+            this->vec[idx] = left[i];
+            ++i;
         }
         else
         {
-            this->vec[k] = right[j];
-            j++;
+            this->vec[idx] = right[j];
+            ++j;
         }
-        k++;
+        ++idx;
     }
 
-    while(i < left_size)
+    while (i < left_size)
     {
-        this->vec[k] = left[i];
-        i++;
-        k++;
+        this->vec[idx] = left[i];
+        ++i;
+        ++idx;
     }
+
     while (j < right_size)
     {
-        this->vec[k] = right[j];
-        j++;
-        k++;
+        this->vec[idx] = right[j];
+        ++j;
+        ++idx;
     }
 }
 
-void PmergeMe::mergeInsertVec(int a, int b)
+void PmergeMe::InsertVec(int start, int end)
 {
-    if (a >= b)
-        return;
-    int m = (a + b - 1) / 2;
-    mergeInsertVec(a, m);
-    mergeInsertVec(m+1, b);
-    mergeVec(a, b, m);
+    for (int i = start+1; i <= end; i++)
+    {
+        int key = this->vec[i];
+        int j = i -1;
+        while (j >= start && this->vec[j] > key)
+        {
+            this->vec[j + 1] = this->vec[j];
+            --j;
+        }
+        this->vec[j + 1] = key;
+    }
 }
 
-void PmergeMe::printOut(int argc, char **argv)
+void PmergeMe::mergeInsertVec(int start, int end)
+{
+    if (start < end)
+    {
+        if (end - start <= 10)
+            InsertVec(start, end);
+        else
+        {
+            int mid = start + (end - start) / 2;
+            mergeInsertVec(start, mid);
+            mergeInsertVec(mid+1, end);
+            mergeVec(start, mid, end);
+        }
+    }
+    if (isDuplicateVec())
+    {
+        std::cerr << "Error: a duplicate has been detected, check your arguments." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+void PmergeMe::printOut(int argc, char **argv, double dur_vec, double dur_deq)
 {
     std::cout << "Before: " ;
     for (int i = 1; i < argc; i++)
         std::cout << argv[i] << " ";
     std::cout << std::endl;
     std::cout << "After: " ;
-    for (int j = 0; j < this->vec.size(); j++)
+    for (size_t j = 0; j < this->vec.size(); j++)
         std::cout << this->vec[j] << " ";
+    std::cout << std::endl;
+    std::cout << "Time to process a range of " << argc - 1 
+    << " elements with std::this->vector : ";
+    std::printf("%.6fs", dur_vec);
+    std::cout << std::endl;
+    std::cout << "Time to process a range of " << argc - 1 
+    << " elements with std::this->deque : ";
+    std::printf("%.6fs", dur_deq);
     std::cout << std::endl;
 }
 
@@ -105,18 +172,122 @@ void PmergeMe::checkConvert(int argc, char **argv)
     while(i < argc)
     {
         this->vec.push_back(atoi(argv[i]));
+        this->deq.push_back(atoi(argv[i]));
         i++;
     }
-    clock_t start = clock();
-    mergeInsertVec(0, this->vec.size() - 1);
-    clock_t end = clock();
-    printOut(argc, argv);
-    double dur = double(end - start) / CLOCKS_PER_SEC;
-    double dur_m = dur * 1000000;
-    std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << dur_m << "us" << std::endl;
+    printOut(argc, argv, vec_duration(), deq_duration());
 }
 
-    // for (i = 0; i < n1; i++)
-    //     L.push_back(arr[l + i]);
-    // for (j = 0; j < n2; j++)
-    //     R.push_back(arr[m + 1 + j]);
+//deque
+
+
+double PmergeMe::deq_duration()
+{
+    clock_t start = clock();
+    mergeInsertDeq(0, this->deq.size() - 1);
+    clock_t end = clock();
+    double dur = double(end - start) / CLOCKS_PER_SEC;
+    return (dur);
+}
+
+bool PmergeMe::isDuplicateDeq()
+{
+    int size = this->deq.size();
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = i + 1; j < size; j++)
+        {
+            if (deq[i] == vec[j])
+                return true;
+        }
+    }
+    return false;
+}
+
+void PmergeMe::mergeDeq(int start, int mid, int end)
+{
+    int left_size = mid - start + 1;
+    int right_size = end - mid;
+    std::deque<int> left(left_size);
+    std::deque<int> right(right_size);
+
+    int i = 0;
+    while (i < left_size)
+    {
+        left[i] = this->deq[start + i];
+        ++i;
+    }
+    int j = 0;
+    while (j < right_size)
+    {
+        right[j] = this->deq[mid + 1 + j];
+        ++j;
+    }
+    i = 0;
+    j = 0;
+    int idx = start;
+    while (i < left_size && j < right_size)
+    {
+        if (left[i] <= right[j])
+        {
+            this->deq[idx] = left[i];
+            ++i;
+        }
+        else
+        {
+            this->deq[idx] = right[j];
+            ++j;
+        }
+        ++idx;
+    }
+
+    while (i < left_size)
+    {
+        this->deq[idx] = left[i];
+        ++i;
+        ++idx;
+    }
+
+    while (j < right_size)
+    {
+        this->deq[idx] = right[j];
+        ++j;
+        ++idx;
+    }
+}
+
+void PmergeMe::InsertDeq(int start, int end)
+{
+    for (int i = start+1; i <= end; i++)
+    {
+        int key = this->deq[i];
+        int j = i -1;
+        while (j >= start && this->deq[j] > key)
+        {
+            this->deq[j + 1] = this->deq[j];
+            --j;
+        }
+        this->deq[j + 1] = key;
+    }
+}
+
+void PmergeMe::mergeInsertDeq(int start, int end)
+{
+    if (start < end)
+    {
+        if (end - start <= 10)
+            InsertDeq(start, end);
+        else
+        {
+            int mid = start + (end - start) / 2;
+            mergeInsertDeq(start, mid);
+            mergeInsertDeq(mid+1, end);
+            mergeDeq(start, mid, end);
+        }
+    }
+    if (isDuplicateDeq())
+    {
+        std::cerr << "Error: a duplicate has been detected, check your arguments." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+}

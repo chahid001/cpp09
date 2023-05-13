@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   RPN.cpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schahid <schahid@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/13 09:17:05 by schahid           #+#    #+#             */
+/*   Updated: 2023/05/13 16:46:23 by schahid          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "RPN.hpp"
 
 RPN::RPN(){}
@@ -6,10 +18,12 @@ RPN::~RPN(){}
 
 RPN::RPN(const RPN& copy)
 {
+    this->stack = copy.stack;
 }
 
 RPN& RPN::operator=(const RPN& in)
 {
+    this->stack = in.stack;
     return (*this);
 }
 
@@ -37,7 +51,7 @@ int RPN::calcOperation(int a, int b, char op)
     {
         if (a == 0)
         {
-            std::cout << "Can't divide by zero" << std::endl;
+            std::cout << "Error" << std::endl;
             exit(EXIT_FAILURE);
         }
         return (b/a);
@@ -51,31 +65,45 @@ int RPN::getStackTop()
     return (this->stack.top());
 }
 
-void RPN::expEval(char *exp)
+void RPN::argvTostring(char **argv)
 {
-    int i = 0;
-    int res;
-    int nb;
+    std::stringstream ss;
+    std::string expression;
+    int i = 1;
+    int j = 0;
 
-    while (exp[i])
+    while (argv[i])
+    {
+        while (argv[i][j])
+        {
+            ss << argv[i][j];
+            j++;
+        }
+        i++;
+    }
+    expression = ss.str();
+    expEval(expression);
+}
+
+void RPN::expEval(std::string exp)
+{
+    size_t i = 0;
+    int res;
+
+    while (i < exp.length())
     {
         while (isspace(exp[i]))
             i++;
         if (isOperand(exp[i]) != -1)
         {
-            nb = atoi (&exp[i]);
-            if (nb >= 10)
-            {
-                std::cout << "Try a number less than 10" << std::endl;
-                exit(EXIT_FAILURE);
-            }
-            this->stack.push(atoi(&exp[i]));
+            char tmp[2] = {exp[i], '\0'};
+            this->stack.push(atoi(tmp));
         }
         else if (isOperator(exp[i]) != -1)
         {
             if (this->stack.size() < 2)
             {
-                std::cout << "Syntax error" << std::endl;
+                std::cout << "Error" << std::endl;
                 exit(EXIT_FAILURE);
             }
             int a = this->stack.top();
@@ -85,7 +113,17 @@ void RPN::expEval(char *exp)
             res = calcOperation(a, b, exp[i]);
             this->stack.push(res);
         }
+        else
+        {
+            std::cout << "Error" << std::endl;
+            exit(EXIT_FAILURE);
+        }
         i++;
+    }
+    if (this->stack.size() != 1)
+    {
+        std::cout << "Error" << std::endl;
+        exit(EXIT_FAILURE);
     }
     std::cout << getStackTop() << std::endl;
 }

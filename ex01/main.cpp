@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schahid <schahid@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/13 09:17:10 by schahid           #+#    #+#             */
+/*   Updated: 2023/05/13 16:39:03 by schahid          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "RPN.hpp"
 
 int main(int argc, char **argv)
@@ -9,8 +21,7 @@ int main(int argc, char **argv)
     else
     {
         RPN exp;
-        exp.expEval(argv[1]);
-
+        exp.argvTostring(argv);
     }
 }
 
