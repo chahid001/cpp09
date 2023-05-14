@@ -1,4 +1,16 @@
-# include "PmergeMe.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PmergeMe.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: schahid <schahid@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/14 09:45:20 by schahid           #+#    #+#             */
+/*   Updated: 2023/05/14 10:03:51 by schahid          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "PmergeMe.hpp"
 
 PmergeMe::PmergeMe(){}
 
@@ -96,7 +108,7 @@ void PmergeMe::mergeVec(int start, int mid, int end)
 
 void PmergeMe::InsertVec(int start, int end)
 {
-    for (int i = start+1; i <= end; i++) //i = 1
+    for (int i = start+1; i <= end; i++)
     {
         int key = this->vec[i];
         int j = i - 1; 
@@ -123,15 +135,20 @@ void PmergeMe::mergeInsertVec(int start, int end)
             mergeVec(start, mid, end);
         }
     }
+}
+
+void PmergeMe::printOut(int argc, char **argv, double dur_vec, double dur_deq)
+{
     if (isDuplicateVec())
     {
         std::cerr << "Error: a duplicate has been detected, check your arguments." << std::endl;
         exit(EXIT_FAILURE);
     }
-}
-
-void PmergeMe::printOut(int argc, char **argv, double dur_vec, double dur_deq)
-{
+    if (isDuplicateDeq())
+    {
+        std::cerr << "Error: a duplicate has been detected, check your arguments." << std::endl;
+        exit(EXIT_FAILURE);
+    }
     std::cout << "Before: " ;
     for (int i = 1; i < argc; i++)
         std::cout << argv[i] << " ";
@@ -160,7 +177,7 @@ void PmergeMe::checkConvert(int argc, char **argv)
         {
             if (argv[i][j] < '0' || argv[i][j] > '9')
             {
-                std::cout << "err" << std::endl;
+                std::cerr << "Error: please enter a valid argument." << std::endl;
                 exit(EXIT_FAILURE);
             }
             j++;
@@ -197,7 +214,7 @@ bool PmergeMe::isDuplicateDeq()
     {
         for (int j = i + 1; j < size; j++)
         {
-            if (deq[i] == vec[j])
+            if (deq[i] == deq[j])
                 return true;
         }
     }
@@ -284,10 +301,5 @@ void PmergeMe::mergeInsertDeq(int start, int end)
             mergeInsertDeq(mid+1, end);
             mergeDeq(start, mid, end);
         }
-    }
-    if (isDuplicateDeq())
-    {
-        std::cerr << "Error: a duplicate has been detected, check your arguments." << std::endl;
-        exit(EXIT_FAILURE);
     }
 }

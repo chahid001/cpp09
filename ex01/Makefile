@@ -6,7 +6,7 @@
 #    By: schahid <schahid@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/13 09:17:14 by schahid           #+#    #+#              #
-#    Updated: 2023/05/13 16:50:23 by schahid          ###   ########.fr        #
+#    Updated: 2023/05/14 09:58:56 by schahid          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CPP= c++
 CPPFLAGS= -Wall -Wextra -Werror -std=c++98
 
 $(NAME): $(OBJ)
-		@$(CPP) $(CPPFLAGS) -o $(NAME) $(OBJ)
+		@$(CPP) $(CPPFLAGS) $(OBJ) -o $(NAME) 
 		@echo "RPN compiled successfully ✅"
 		
 %.o: %.cpp

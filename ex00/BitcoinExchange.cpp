@@ -6,7 +6,7 @@
 /*   By: schahid <schahid@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 11:46:32 by schahid           #+#    #+#             */
-/*   Updated: 2023/05/12 16:01:05 by schahid          ###   ########.fr       */
+/*   Updated: 2023/05/14 10:28:07 by schahid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void BitcoinExchange::findCalc(std::string date, float value)
         std::cout << date << " => " << value << " = " << value*it->second << std::endl;
     else
     {
-        std::map<std::string, float>::iterator lower = this->database.end(); 
+        std::map<std::string, float>::iterator lower; 
         for (it = this->database.begin(); it != this->database.end(); it++)
         {
             if (it->first <= date)
@@ -163,7 +163,7 @@ void BitcoinExchange::readParse(char *argv)
             if (!checkDate(date))
             {
                 std::cout << "Error: bad input => " << input << std::endl;
-                continue;  
+                continue;
             }
             value = checkValue(input.substr(pos+2));
             if (value == -2.0)

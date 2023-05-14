@@ -6,7 +6,7 @@
 #    By: schahid <schahid@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/12 11:46:56 by schahid           #+#    #+#              #
-#    Updated: 2023/05/13 16:50:40 by schahid          ###   ########.fr        #
+#    Updated: 2023/05/14 10:34:30 by schahid          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CPP= c++
 CPPFLAGS= -Wall -Wextra -Werror -std=c++98
 
 $(NAME): $(OBJ)
-		@$(CPP) $(CPPFLAGS) -o $(NAME) $(OBJ)
+		@$(CPP) $(CPPFLAGS) $(OBJ) -o $(NAME) 
 		@echo "BitcoinExchange compiled successfully ✅"
 %.o: %.cpp
 		@$(CPP) $(CPPFLAGS) -c $<
