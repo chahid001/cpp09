@@ -66,17 +66,15 @@ Time (Deque): 0.000145 seconds
 
 ### Input  
 ```txt  
-Enter a list of numbers:  
-10 4 6 8 3  
+./PmergeMe 10 4 6 8 3  
 ```  
 
 ### Output  
 ```txt  
-Sorted List (Vector): 3 4 6 8 10  
-Time (Vector): 0.000123 seconds  
-
-Sorted List (Deque): 3 4 6 8 10  
-Time (Deque): 0.000145 seconds  
+Before: 10 4 6 8 3
+After: 3 4 6 8 10
+Time to process a range of 5 elements with std::this->vector : 0.000005s
+Time to process a range of 5 elements with std::this->deque : 0.000002s
 ```  
 
 ---  
