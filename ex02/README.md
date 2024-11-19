@@ -1,7 +1,6 @@
+# 🔄 PmergeMe - Optimized Sorting with Performance Comparison  
 
-# 🔄 PmergeMe - Optimized Sorting  
-
-In **PmergeMe**, you'll implement a hybrid sorting algorithm using STL containers to combine performance and flexibility.  
+In **PmergeMe**, you'll implement a hybrid sorting algorithm while measuring and comparing performance differences between `std::vector` and `std::deque`.  
 
 ---  
 
@@ -9,8 +8,8 @@ In **PmergeMe**, you'll implement a hybrid sorting algorithm using STL container
 
 Your task is to:  
 1. Implement a sorting algorithm combining merge and insertion sort.  
-2. Use STL containers like vectors or deques for sorting.  
-3. Optimize for large datasets.  
+2. Use STL containers like vectors and deques for sorting.  
+3. Measure the performance of sorting using both containers.  
 
 ---  
 
@@ -40,7 +39,26 @@ Your task is to:
 ## 💡 Key Features  
 
 - **Hybrid Sorting**: Combines merge and insertion sort for efficiency.  
+- **Performance Measurement**: Compares execution time for `std::vector` and `std::deque`.  
 - **Flexible Input**: Handles input of integers from files or standard input.  
+
+---  
+
+## ⏱️ Performance Comparison  
+
+The program includes two key methods to measure sorting time:  
+
+- `double PmergeMe::vec_duration()`: Sorts using `std::vector` and returns the execution time.  
+- `double PmergeMe::deque_duration()`: Sorts using `std::deque` and returns the execution time.  
+
+### Example Output  
+```txt  
+Sorted List (Vector): 3 4 6 8 10  
+Time (Vector): 0.000123 seconds  
+
+Sorted List (Deque): 3 4 6 8 10  
+Time (Deque): 0.000145 seconds  
+```  
 
 ---  
 
@@ -54,18 +72,27 @@ Enter a list of numbers:
 
 ### Output  
 ```txt  
-Sorted List: 3 4 6 8 10  
+Sorted List (Vector): 3 4 6 8 10  
+Time (Vector): 0.000123 seconds  
+
+Sorted List (Deque): 3 4 6 8 10  
+Time (Deque): 0.000145 seconds  
 ```  
 
 ---  
 
 ## 🚀 Concepts Used  
 
-- STL Vectors 📊 for dynamic arrays.  
+- STL Vectors and Deques 📊 for container flexibility.  
 - Hybrid algorithms 🚀 for optimized sorting.  
+- Clock timing ⏱️ to measure execution performance.  
 
 ---  
 
 ## 🏆 Challenge  
 
-Experiment with different thresholds for switching between merge and insertion sort!  
+Experiment with different dataset sizes to observe performance trends between `std::vector` and `std::deque`.  
+
+---  
+
+Happy coding! 💻  
